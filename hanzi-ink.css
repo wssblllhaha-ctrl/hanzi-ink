@@ -1,0 +1,16 @@
+/* hanzi-ink 样式：等粗细中线描边 + 逐笔揭示。
+ * 颜色可通过 --script-ink 统一调整；宽度用 --handwriting-width 覆盖。
+ */
+/* 生成的 SVG 里带一段仅供读屏的原文，避免依赖宿主页面是否定义了 .sr-only。 */
+[data-rendered="handwriting"] .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+[data-rendered="handwriting"] .handwriting{display:block;width:var(--handwriting-width,min(100%,320px));height:auto;margin:10px 0 8px;overflow:visible}
+[data-rendered="handwriting"] .handwriting-stroke{fill:none;stroke:var(--script-ink,#365e48);stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:var(--length,0) calc(var(--length,0)*2);stroke-dashoffset:var(--length,0);animation:handwriting-reveal var(--duration,760ms) cubic-bezier(.42,.05,.2,1) var(--delay,0ms) forwards}
+[data-rendered="handwriting"] .handwriting-fallback{opacity:0}
+[data-rendered="handwriting"] .handwriting-fallback-text{fill:var(--script-ink,#365e48);stroke:none;font-family:"Kaiti SC","STKaiti",KaiTi,"Noto Serif SC",serif}
+[data-rendered="handwriting"].handwriting-instant .handwriting-stroke{animation:none;stroke-dashoffset:0}
+[data-rendered="handwriting"].handwriting-instant .handwriting-fallback{opacity:1}
+/* 从整段隐藏推到整段显形，得到沿笔迹方向"写出来"的效果。 */
+@keyframes handwriting-reveal{from{stroke-dashoffset:var(--length,0)}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){[data-rendered="handwriting"] .handwriting-stroke{animation:none;stroke-dashoffset:0}[data-rendered="handwriting"] .handwriting-fallback{opacity:1}}
+/* 先排好版但按住不动（ink-waiting），等开屏结束 / 滚动到视口再放开，从第一笔开始写。 */
+[data-rendered="handwriting"].ink-waiting .handwriting-stroke{animation-play-state:paused}
